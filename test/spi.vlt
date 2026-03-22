@@ -1,0 +1,5 @@
++define+VERILATOR
+
+${SPI_TOP}/src/spi_pkg.sv
+${SPI_TOP}/src/spi.sv
+${SPI_TOP}/test/tb_spi.sv
