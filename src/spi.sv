@@ -1,8 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
 
-`timescale 1ns/1ps
-
 module spi import spi_pkg::*; #(
 ) (
 	input  logic         clk_i,
