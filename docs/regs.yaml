@@ -1,0 +1,117 @@
+# Single source of truth for the register map. docs/gen_regmap.py renders
+#   * docs/generated/registers_gen.md  (register reference in the docs; built
+#     on every Sphinx run, never edited by hand, not versioned)
+#   * sw/include/qspi_regs.h           (C register/bit-field header; versioned,
+#     CI checks that it matches this file)
+#
+# access: RW  = read/write
+#         RO  = read-only
+#         W1C = write-1-to-clear
+#         RWnb = read/write, but writes are ignored while SR.BUSY=1
+
+block:
+  name: QSPI
+  description: Quad-SPI controller (CSR port, indirect mode)
+  base: "0x2000_0000 (hatch SoC, window UserQspiCfg)"
+
+registers:
+  - name: CR
+    offset: 0x00
+    reset: 0x00000000
+    description: Control Register
+    fields:
+      - {bits: "0",    name: EN,        access: RW,  desc: "Controller enable. 0 = all commands/mmap accesses rejected."}
+      - {bits: "1",    name: ABORT,     access: RW,  desc: "Abort the running transfer; flushes the FIFO. Self-clearing once the sequencer is idle. Mandatory flow for leaving memory-mapped mode."}
+      - {bits: "15:8", name: PRESCALER, access: RW,  desc: "SCK divider: SCK = clk / (2*(PRESCALER+1))."}
+
+  - name: DCR
+    offset: 0x04
+    reset: 0x00000010
+    description: Device Configuration Register
+    fields:
+      - {bits: "4:0",  name: FSIZE, access: RW, desc: "Device size = 2^(FSIZE+1) bytes. Reset 16 -> 128 KiB (23LC1024). W25Q128JV flash: 23 -> 16 MiB. Change only while SR.BUSY=0."}
+      - {bits: "10:8", name: CSHT,  access: RW, desc: "Minimum CS-high time between two commands, in SCK cycles. Change only while SR.BUSY=0."}
+
+  - name: SR
+    offset: 0x08
+    reset: 0x00000000
+    description: Status Register (read-only)
+    fields:
+      - {bits: "0",    name: TEF,    access: RO, desc: "Transfer Error Flag: indirect command with address+length beyond FSIZE (the command was not started). Clear via FCR.CTEF."}
+      - {bits: "1",    name: TCF,    access: RO, desc: "Transfer Complete Flag: all DLR+1 data bytes transferred. Clear via FCR.CTCF; cleared automatically when the next command starts."}
+      - {bits: "5",    name: BUSY,   access: RO, desc: "Sequencer active (incl. CS tail and CSHT). Permanently 1 in memory-mapped mode (the prefetch stream is running)."}
+      - {bits: "13:8", name: FLEVEL, access: RO, desc: "Data-FIFO fill level in bytes (0...32)."}
+
+  - name: FCR
+    offset: 0x0C
+    reset: 0x00000000
+    description: Flag Clear Register
+    fields:
+      - {bits: "0", name: CTEF, access: W1C, desc: "Writing 1 clears SR.TEF."}
+      - {bits: "1", name: CTCF, access: W1C, desc: "Writing 1 clears SR.TCF."}
+
+  - name: DLR
+    offset: 0x10
+    reset: 0x00000000
+    description: Data Length Register
+    fields:
+      - {bits: "31:0", name: DL, access: RWnb, desc: "Data length - 1 in bytes for indirect transfers (0 = 1 byte). Ignored in memory-mapped mode."}
+
+  - name: CCR
+    offset: 0x14
+    reset: 0x00000000
+    description: Communication Configuration Register (frame format + functional mode)
+    fields:
+      - {bits: "7:0",   name: INSTRUCTION, access: RWnb, desc: "Opcode of the instruction phase."}
+      - {bits: "9:8",   name: IMODE,       access: RWnb, desc: "Lanes of the instruction phase: 00 skip / 01 single / 10 dual / 11 quad."}
+      - {bits: "11:10", name: ADMODE,      access: RWnb, desc: "Lanes of the address phase (same encoding as IMODE)."}
+      - {bits: "13:12", name: ADSIZE,      access: RWnb, desc: "Address bytes - 1 (2 = 24-bit address, both target chips)."}
+      - {bits: "15:14", name: ABMODE,      access: RWnb, desc: "Lanes of the alternate-byte phase (e.g. the mode byte of 0xEB)."}
+      - {bits: "17:16", name: ABSIZE,      access: RWnb, desc: "Alternate bytes - 1."}
+      - {bits: "22:18", name: DCYC,        access: RWnb, desc: "Dummy cycles in SCK clocks (0 = none). SRAM SQI read: 2 / flash 0x6B/0x0B: 8 / flash 0xEB: 4."}
+      - {bits: "25:24", name: DMODE,       access: RWnb, desc: "Lanes of the data phase (00 = no data phase)."}
+      - {bits: "27:26", name: FMODE,       access: RWnb, desc: "Functional mode: 00 indirect write / 01 indirect read / 11 memory-mapped."}
+
+  - name: AR
+    offset: 0x18
+    reset: 0x00000000
+    description: Address Register
+    fields:
+      - {bits: "31:0", name: ADDRESS, access: RWnb, desc: "Chip address for indirect commands. A write triggers the command if ADMODE!=00 and (FMODE=01 or DMODE=00)."}
+
+  - name: ABR
+    offset: 0x1C
+    reset: 0x00000000
+    description: Alternate Bytes Register
+    fields:
+      - {bits: "31:0", name: ALTERNATE, access: RWnb, desc: "Alternate bytes (MSByte sent first). Also used for the read frames in memory-mapped mode."}
+
+  - name: DR
+    offset: 0x20
+    reset: ~
+    description: Data Register (FIFO port)
+    fields:
+      - {bits: "31:0", name: DATA, access: RW, desc: "Direct FIFO access. Transfer width = asserted byte enables (sb->1, sh->2, sw->4 bytes). A write pushes (and triggers the command when FMODE=00, DMODE!=00, BUSY=0); a read pops. Contract: push exactly DLR+1 bytes; check SR.FLEVEL before reading."}
+
+  - name: WCCR
+    offset: 0x24
+    reset: 0x00000000
+    description: Write Communication Configuration Register (frame format for memory-mapped WRITES)
+    fields_like: CCR
+    fields_note: "Identical field layout to CCR; FMODE is ignored. WCCR.DMODE=00 blocks mmap writes (bus error) -- mandatory for read-only devices (flash)."
+
+# Field encodings shared across registers; emitted into the C header.
+enums:
+  - prefix: QSPI_PH
+    description: "Lane mode of a frame phase (CCR/WCCR *MODE fields)"
+    values:
+      - {name: SKIP,   value: 0, desc: "phase skipped"}
+      - {name: SINGLE, value: 1, desc: "1 lane"}
+      - {name: DUAL,   value: 2, desc: "2 lanes"}
+      - {name: QUAD,   value: 3, desc: "4 lanes"}
+  - prefix: QSPI_FM
+    description: "Functional mode (CCR.FMODE)"
+    values:
+      - {name: IND_WRITE, value: 0, desc: "indirect write"}
+      - {name: IND_READ,  value: 1, desc: "indirect read"}
+      - {name: MEMMAP,    value: 3, desc: "memory-mapped"}
