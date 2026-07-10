@@ -2,3 +2,20 @@ obj_dir
 obj_dir/*
 
 *.log
+# Private working notes (deliberately unversioned; their content has been
+# folded into the Sphinx docs under docs/)
+notes/
+
+# Sphinx build artifacts + generated pages
+docs/_build/
+docs/generated/
+
+# FPGA build artifacts + machine-local toolchain paths
+fpga/arty/*.json
+fpga/arty/*.fasm
+fpga/arty/*.frames
+fpga/arty/*.bit
+fpga/arty/local.mk
+
+# Wave dumps
+*.fst
