@@ -48,6 +48,18 @@ else ifeq ($(TOP),tb_w25q128jv)
 SV_SRCS := \
 	../model/w25q128jv.sv \
 	tb_w25q128jv.sv
+else ifeq ($(TOP),tb_arty_pair)
+SV_SRCS := \
+	../model/s23lc1024.sv \
+	../fpga/arty/spi_test_master.sv \
+	../fpga/arty/tb_arty_pair.sv
+else ifeq ($(TOP),tb_loopback)
+SV_SRCS := \
+	../model/s23lc1024.sv \
+	../fpga/arty/spi_test_master.sv \
+	../fpga/arty/uart_tx.sv \
+	../fpga/arty/top_loopback.sv \
+	tb_loopback.sv
 else
 SV_SRCS := \
 	../model/s23lc1024.sv \
@@ -60,7 +72,9 @@ all: build run
 
 # Core set (models + controller): the CI gate that runs on every MR.
 CORE_TOPS := tb_s23lc1024 tb_w25q128jv tb_qspi_top tb_qspi_flash
-TEST_TOPS := $(CORE_TOPS)
+# Extended set: FPGA-top testbenches on top of the core set.
+FPGA_TOPS := tb_arty_pair tb_loopback
+TEST_TOPS := $(CORE_TOPS) $(FPGA_TOPS)
 
 define run-tops
 	@for top in $(1); do \
