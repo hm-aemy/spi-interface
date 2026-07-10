@@ -16,12 +16,34 @@ VERILATOR_ARGS := --binary --sv --timing -Wall -Wno-fatal
 VERILATOR_ARGS += --trace-fst --trace-structs
 VERILATOR_ARGS += +define+VERILATOR
 
+# QSPI controller RTL (shared by tb_qspi_top and the SoC build).
+QSPI_SRCS := \
+	../src/spi_pkg.sv \
+	../src/qspi_pkg.sv \
+	../src/qspi_sck_div.sv \
+	../src/qspi_shift.sv \
+	../src/qspi_fifo.sv \
+	../src/qspi_cmd_seq.sv \
+	../src/qspi_regs.sv \
+	../src/qspi_mmap.sv \
+	../src/qspi_top.sv
+
 # Source set per testbench.
 ifeq ($(TOP),tb_spi)
 SV_SRCS := \
 	../src/spi_pkg.sv \
 	../src/spi.sv \
 	tb_spi.sv
+else ifeq ($(TOP),tb_qspi_top)
+SV_SRCS := \
+	$(QSPI_SRCS) \
+	../model/s23lc1024.sv \
+	tb_qspi_top.sv
+else ifeq ($(TOP),tb_qspi_flash)
+SV_SRCS := \
+	$(QSPI_SRCS) \
+	../model/w25q128jv.sv \
+	tb_qspi_flash.sv
 else ifeq ($(TOP),tb_w25q128jv)
 SV_SRCS := \
 	../model/w25q128jv.sv \
@@ -37,7 +59,7 @@ endif
 all: build run
 
 # Core set (models + controller): the CI gate that runs on every MR.
-CORE_TOPS := tb_s23lc1024 tb_w25q128jv
+CORE_TOPS := tb_s23lc1024 tb_w25q128jv tb_qspi_top tb_qspi_flash
 TEST_TOPS := $(CORE_TOPS)
 
 define run-tops
