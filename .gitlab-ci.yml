@@ -1,0 +1,69 @@
+# CI of the spi-interface repo.
+#
+# Per-MR/per-push gate (kept deliberately small):
+#   * qspi-core-tests     -- model + controller testbenches (make test-core)
+#   * check-generated     -- generated register header matches docs/regs.yaml
+# Extended coverage (FPGA-top testbenches) runs on the default branch, when
+# the FPGA sources change, or manually.
+# Docs are published as GitLab Pages from the default branch:
+#   https://<namespace>.pages.<gitlab-instance>/<project>/
+
+stages:
+  - test
+  - deploy
+
+.verilator-base:
+  stage: test
+  image: ubuntu:24.04
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends verilator make g++ ca-certificates zlib1g-dev
+  artifacts:
+    when: on_failure
+    paths:
+      - test/sim.log
+      - test/build.log
+
+qspi-core-tests:
+  extends: .verilator-base
+  script:
+    - cd test && make test-core
+
+qspi-fpga-tests:
+  extends: .verilator-base
+  script:
+    - cd test && make test-all
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - changes:
+        - fpga/**/*
+        - model/**/*
+    - when: manual
+      allow_failure: true
+
+# The C register header sw/include/qspi_regs.h is generated from
+# docs/regs.yaml and checked in. Regenerate and fail if it is stale, so the
+# register map can never drift apart between hardware docs and software.
+check-generated:
+  stage: test
+  image: python:3.12-slim
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git
+  script:
+    - pip install --no-cache-dir PyYAML
+    - python3 docs/gen_regmap.py
+    - git diff --exit-code -- sw/include/qspi_regs.h
+  artifacts:
+    paths:
+      - sw/include/qspi_regs.h
+
+pages:
+  stage: deploy
+  image: python:3.12-slim
+  script:
+    - pip install --no-cache-dir -r docs/requirements.txt
+    - sphinx-build -b html -W --keep-going docs public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
