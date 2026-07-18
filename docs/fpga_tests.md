@@ -1,22 +1,27 @@
 # FPGA Test Setups (Arty A7)
 
 This page describes the **SPI-specific hardware test setups** of this
-repository on Digilent Arty A7 boards, entirely with open-source tools (no
-Vivado):
+repository on Digilent Arty A7 boards:
 
 1. **Single-board loopback** — test master + SRAM slave inside one FPGA,
    result via USB-UART. Fastest hardware proof, no wiring at all.
 2. **Two-board model test** — SRAM slave on Board A (`top_model.sv`),
    synthesisable test master on Board B (`top_master.sv`), connected via
-   Pmod. Proves the protocol over a real cable.
+   Pmod. Proves the protocol over a real cable. Open-source flow
+   (`fpga/arty/`), unidirectional wiring (see {doc}`known_issues`).
+3. **Two-board model, Vivado** (`fpga/vivado/`) — same `fpga_sram_slave.sv`,
+   but `top_model`'s `SIO0..3` are one genuine bidirectional Pmod bus instead
+   of split command/response pin groups. Fewer wires, and real tri-state.
 
-The third setup — the **complete hatch SoC on Board A** driving the SRAM
-slave on Board B — lives in the hatch repository and is documented there
-(hatch docs, *Two-board FPGA test*); Board B is programmed exactly as
-described here.
+The **complete hatch SoC on Board A** driving the SRAM slave on Board B (both
+setups 2 and 3 above have a hatch-SoC counterpart) lives in the hatch
+repository and is documented there (hatch docs, *Two-board FPGA test* /
+*FPGA Flow, Vivado*); Board B is programmed exactly as described here either
+way.
 
-All files live under `fpga/arty/`. Hardware pitfalls found during bring-up
-are collected separately in {doc}`known_issues`.
+Setups 1 and 2 use the open-source toolchain only (`fpga/arty/`); setup 3
+uses Vivado (`fpga/vivado/`). Hardware pitfalls found during bring-up are
+collected separately in {doc}`known_issues`.
 
 ## Files involved
 
@@ -151,6 +156,38 @@ to start the sequence.
 4. Check which signals physically arrive with a counting bus-spy bitstream
    before debugging logic — see the methodology notes in
    {doc}`known_issues`.
+
+## Setup 3: two boards, Vivado (real bidirectional pins)
+
+`fpga/vivado/` builds the same `fpga_sram_slave.sv` behind a different
+`top_model`: `SIO0..3` is one genuine bidirectional `inout` bus (`ja_sio`)
+instead of the open-source flow's split command/response pin groups. Reason
+and wiring implications: {doc}`known_issues` (`IOBUF` non-functional under
+nextpnr-xilinx) and the hatch repository's `docs/fpga_vivado_flow.md`, which
+covers the mirror-image change on the SoC side in full.
+
+```{note}
+This only replaces `top_model` (Board A/the memory in this repo's own
+naming, "Board B" in the hatch two-board doc — see the wiring tables, the
+naming direction differs between the two repos' docs). There is no Vivado
+counterpart of `top_master.sv`/`spi_test_master.sv` yet; setup 3 has so far
+only been run against the hatch SoC (`fpga/vivado/hatch.bit` in the hatch
+repository), not against this repository's own standalone test master.
+```
+
+```bash
+cd fpga/vivado
+make model.bit                       # needs Vivado; local.mk: VIVADO := /path/to/vivado
+make prog-model FTDI_SERIAL=<serial-of-the-model-board>
+```
+
+Confirmed 2026-07-16 on two Arty A7-100T, cables unchanged from the
+unidirectional setup (the now-unused former response pins JA9/JA10/JB1/JB2
+simply stay wired but undriven on both ends — harmless): hatch SoC
+(`fpga/vivado/hatch.bit`) against this `model.bit`,
+`QSPI FPGA TEST PASSED (13 checks)`, all 13 checks green including SQI quad
+mode — the tri-state switching works correctly on both ends of a real cable,
+not just within one FPGA's own pad ring.
 
 ## Outlook: flash model on Board A
 

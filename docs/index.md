@@ -17,8 +17,10 @@ Supported/validated target devices:
 ```{admonition} Status: Beta
 :class: important
 Fully simulation-verified (6 self-checking testbenches + SoC system
-simulation) and **FPGA-validated** on Arty A7-100T boards (open-source flow),
-including a two-board run inside the complete hatch SoC.
+simulation) and **FPGA-validated** on Arty A7-100T boards, both the
+open-source flow (two-board run inside the complete hatch SoC) and, since
+2026-07-16, a Vivado flow with real bidirectional QSPI pins ({doc}`fpga_tests`
+setup 3) — same two-board result, fewer wires.
 Not yet **silicon-proven**. Details: {doc}`verification` and {doc}`changelog`.
 ```
 

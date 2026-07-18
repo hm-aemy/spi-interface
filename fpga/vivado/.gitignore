@@ -1,0 +1,10 @@
+# Vivado build artefacts + machine-local toolchain paths
+model.bit
+model_files.tcl
+*.dcp
+*.rpt
+*.jou
+*.log
+clockInfo.txt
+.Xil/
+local.mk

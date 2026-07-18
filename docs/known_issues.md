@@ -60,6 +60,12 @@ flow (confirmed by an isolation test). **All board-to-board lanes are
 therefore wired unidirectionally** (separate a2b/b2a pin groups, see
 {doc}`fpga_tests`); nothing in the test setups relies on `z` states.
 
+This is specific to the yosys/nextpnr-xilinx flow, not a hardware
+limitation: Vivado's synthesis handles the standard `oe ? drive : 1'bz`
+idiom natively, confirmed both on `fpga/vivado/top_model.sv` here and on the
+hatch SoC side (hatch repo, `docs/fpga_vivado_flow.md`) -- real tri-state,
+fewer wires, {doc}`fpga_tests` setup 3.
+
 ### Async-CS constructs do not map
 
 `model/s23lc1024.sv` uses `posedge cs_ni` simultaneously as a clock
