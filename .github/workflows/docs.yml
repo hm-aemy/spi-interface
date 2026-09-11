@@ -1,0 +1,60 @@
+# Documentation: strict Sphinx build (-W, warnings are errors) on every push,
+# published as GitHub Pages from the default branch:
+#   https://hm-aemy.github.io/spi-interface/
+# The Pages source must be set to "GitHub Actions" once in the repository
+# settings; configure-pages tries to do that on the first deployment.
+
+name: docs
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: docs/requirements.txt
+
+      - name: Install Sphinx and extensions
+        run: pip install -r docs/requirements.txt
+
+      - name: Build HTML (warnings are errors)
+        run: sphinx-build -b html -W --keep-going docs public
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

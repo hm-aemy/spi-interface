@@ -1,0 +1,40 @@
+# Extended test coverage: all six testbenches including the FPGA-top ones
+# (make test-all). Mirrors the qspi-fpga-tests rules of .gitlab-ci.yml:
+# on the default branch, when FPGA sources or chip models change (checked
+# on pull requests), or manually via workflow_dispatch.
+
+name: fpga-tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - 'fpga/**'
+      - 'model/**'
+      - '.github/workflows/fpga-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  fpga-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Verilator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends verilator make g++ zlib1g-dev
+
+      - name: Run all testbenches
+        run: cd test && make test-all
+
+      - name: Upload simulator logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fpga-tests-logs
+          path: |
+            test/sim.log
+            test/build.log
+          if-no-files-found: ignore

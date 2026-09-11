@@ -1,0 +1,71 @@
+# CI gate of the spi-interface repo -- GitHub Actions counterpart of
+# .gitlab-ci.yml (which stays in place for the GitLab hosting).
+#
+# Per-push gate (kept deliberately small):
+#   * core-tests      -- model + controller testbenches (make test-core)
+#   * check-generated -- generated register header matches docs/regs.yaml
+# Extended coverage (FPGA-top testbenches): fpga-tests.yml.
+# Documentation build + GitHub Pages deployment: docs.yml.
+#
+# Runs on every push. Pull requests are additionally built only when they
+# come from a fork (pushes to branches of this repo are covered already).
+
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  core-tests:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Verilator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends verilator make g++ zlib1g-dev
+
+      - name: Run core testbenches
+        run: cd test && make test-core
+
+      - name: Upload simulator logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-tests-logs
+          path: |
+            test/sim.log
+            test/build.log
+          if-no-files-found: ignore
+
+  # The C register header sw/include/qspi_regs.h is generated from
+  # docs/regs.yaml and checked in. Regenerate and fail if it is stale, so the
+  # register map can never drift apart between hardware docs and software.
+  check-generated:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install PyYAML
+
+      - name: Regenerate the register header
+        run: python3 docs/gen_regmap.py
+
+      - name: Fail if the checked-in header is stale
+        run: git diff --exit-code -- sw/include/qspi_regs.h
+
+      - name: Upload the generated header
+        uses: actions/upload-artifact@v4
+        with:
+          name: qspi_regs.h
+          path: sw/include/qspi_regs.h

@@ -1,5 +1,8 @@
 # QSPI-Interface
 
+[![ci](https://github.com/hm-aemy/spi-interface/actions/workflows/ci.yml/badge.svg)](https://github.com/hm-aemy/spi-interface/actions/workflows/ci.yml)
+[![docs](https://github.com/hm-aemy/spi-interface/actions/workflows/docs.yml/badge.svg)](https://github.com/hm-aemy/spi-interface/actions/workflows/docs.yml)
+
 **Quad-SPI controller with OBI attachment** — maps external serial memories
 into the address space as execution and data memory (XIP) and offers a
 register-driven indirect mode for arbitrary chip commands. Developed for the
@@ -41,7 +44,9 @@ FPGA smoke test on an Arty A7 (result arrives as `PASS` over the USB-UART):
 Full documentation (architecture, interface spec with timing diagrams,
 generated register map, programmer's guide, design rationale, verification
 plan, FPGA test setups, known issues): **`docs/`** (Sphinx/MyST), built by
-CI as GitLab Pages — `https://<namespace>.pages.<gitlab-instance>/<project>/`.
+CI and published as GitHub Pages:
+<https://hm-aemy.github.io/spi-interface/> (on a GitLab hosting: as GitLab
+Pages of the project).
 
 Build locally:
 
@@ -61,7 +66,7 @@ model/  behavioural models 23LC1024 / W25Q128JV
 sw/     generated C register header (qspi_regs.h)
 test/   self-checking testbenches + Makefile (make test-all / test-core)
 fpga/   Arty A7 test setups (wrappers, XDC, open-source-flow Makefile)
-docs/   Sphinx documentation (published as GitLab Pages)
+docs/   Sphinx documentation (published as GitHub Pages)
 ```
 
 ## License

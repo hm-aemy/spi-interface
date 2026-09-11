@@ -4,6 +4,14 @@ Versioning scheme: [SemVer](https://semver.org/) with a status suffix
 (`-beta.N`); "stable" requires the open items from {doc}`verification`
 (coverage, real-chip tests), "silicon-proven" a tapeout.
 
+## Unreleased
+
+- CI: GitHub Actions workflows (`.github/workflows/`) mirroring the GitLab
+  pipeline — core testbenches and the generated-header check on every push
+  (`ci.yml`), all six testbenches on `main`, on FPGA/model changes or
+  manually (`fpga-tests.yml`), strict Sphinx build on every push and
+  publication as GitHub Pages from `main` (`docs.yml`).
+
 ## 1.0.0-beta.3 — 2026-07-08
 
 **Two-board FPGA validation inside the full SoC.**
