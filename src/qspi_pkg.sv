@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Types, register layout and constants of the QSPI controller.
 // Register map (32-bit registers, byte offsets in the CSR window):

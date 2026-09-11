@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Behavioural, protocol-strict simulation model of the Microchip 23LC1024
 // serial SRAM (1 Mbit). SPI / SDI / SQI bus modes, byte/page/sequential

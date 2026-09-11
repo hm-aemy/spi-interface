@@ -8,6 +8,9 @@ Versioning scheme: [SemVer](https://semver.org/) with a status suffix
 
 - License: Solderpad Hardware License v2.1 (`LICENSE`; SPDX
   `Apache-2.0 WITH SHL-2.1`) replaces the "not yet finalised" notice.
+- `SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1` in every file header;
+  the generated `sw/include/qspi_regs.h` now carries the copyright and
+  license lines too (emitted by `gen_regmap.py`).
 - CI: GitHub Actions workflows (`.github/workflows/`) mirroring the GitLab
   pipeline — core testbenches and the generated-header check on every push
   (`ci.yml`), all six testbenches on `main`, on FPGA/model changes or

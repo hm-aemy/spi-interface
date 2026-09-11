@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Phase FSM: executes one qspi_job_t as the programmable frame
 //   [INSTR] [ADDR] [ALT] [DUMMY] [DATA]

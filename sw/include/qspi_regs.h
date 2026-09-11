@@ -1,3 +1,7 @@
+// Copyright 2026 University of Applied Sciences Munich
+// Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+//
 // Generated from docs/regs.yaml by docs/gen_regmap.py -- DO NOT EDIT.
 // Register byte offsets, bit fields and field encodings of the QSPI
 // controller. The SoC-specific base address and register accessors

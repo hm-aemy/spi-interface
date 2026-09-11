@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Behavioural, protocol-strict simulation model of the Winbond W25Q128JV
 // NOR flash (128 Mbit = 16 MByte). READ-focused: all array-write commands

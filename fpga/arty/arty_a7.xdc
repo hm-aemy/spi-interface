@@ -1,5 +1,6 @@
 # Copyright 2026 University of Applied Sciences Munich
 # Christopher Hinz <christopher.hinz@hm.edu>
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 #
 # Arty A7 (35T/100T) constraints for the Phase-3 23LC1024 bring-up. Pin
 # names/locations follow Digilent's official "Arty-A7-35-Master.xdc" /

@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Simulation-only proof that the synthesizable test-master core
 // (spi_test_master, see fpga/arty/spi_test_master.sv) is protocol-correct

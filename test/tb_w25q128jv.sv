@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Self-checking testbench for the behavioural W25Q128JV NOR-Flash model
 // (model/w25q128jv.sv). Drives the chip DIRECTLY via a bit-banging master

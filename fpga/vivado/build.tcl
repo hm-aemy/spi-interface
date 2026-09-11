@@ -1,5 +1,6 @@
 # Copyright 2026 University of Applied Sciences Munich
 # Christopher Hinz <christopher.hinz@hm.edu>
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 #
 # Non-project batch synthesis/implementation/bitstream flow for top_model,
 # same pattern as the hatch repo's fpga/vivado/build.tcl (no .xpr project

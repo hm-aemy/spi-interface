@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Arty-A7 Board-B wrapper ("the memory"), Vivado flow. Identical role to
 // fpga/arty/top_model.sv (drives fpga_sram_slave.sv onto Pmod JA for the

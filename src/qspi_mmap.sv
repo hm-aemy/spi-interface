@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Memory-mapped frontend (XIP): presents the external chip as normal memory.
 // Reads ride an "unlimited" sequential read command (chip in sequential mode,

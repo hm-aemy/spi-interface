@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // TB (Verilator) for the single-board loopback top (fpga/arty/top_loopback.sv):
 // clocks the WHOLE synthesis top (master + model + UART reporter), decodes

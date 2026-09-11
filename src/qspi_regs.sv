@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // CSR file + indirect-mode command triggering (register map: see qspi_pkg).
 // OBI subordinate: gnt is immediate, rvalid follows one cycle later (two for

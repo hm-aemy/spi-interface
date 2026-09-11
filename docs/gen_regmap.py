@@ -83,6 +83,10 @@ def gen_markdown(data: dict) -> str:
 
 def gen_header(data: dict) -> str:
     out = []
+    out.append("// Copyright 2026 University of Applied Sciences Munich")
+    out.append("// Christopher Hinz <christopher.hinz@hm.edu>")
+    out.append("// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1")
+    out.append("//")
     out.append("// Generated from docs/regs.yaml by docs/gen_regmap.py -- DO NOT EDIT.")
     out.append("// Register byte offsets, bit fields and field encodings of the QSPI")
     out.append("// controller. The SoC-specific base address and register accessors")

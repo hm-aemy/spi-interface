@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Single-board variant of the Phase-3 bring-up: spi_test_master AND the
 // s23lc1024 model on the SAME Arty A7, wired together internally (no Pmod

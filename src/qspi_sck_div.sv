@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // SCK prescaler: emits a single-cycle `tick_o` every (presc_i+1) clk cycles.
 // One tick = half an SCK period, so SCK = clk / (2*(presc_i+1)).

@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Synthesizable self-checking SPI/SQI test-master core for the 23LC1024
 // Arty-A7 bring-up (Phase 3). Runs entirely on the board clock (no #delays,

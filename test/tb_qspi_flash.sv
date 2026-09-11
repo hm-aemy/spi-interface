@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // QSPI controller (qspi_top) against the behavioural W25Q128JV flash model:
 // the second chip profile of the plan (dummy cycles, QE bit, quad reads).

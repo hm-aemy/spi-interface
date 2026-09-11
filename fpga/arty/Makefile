@@ -1,5 +1,6 @@
 # Copyright 2026 University of Applied Sciences Munich
 # Christopher Hinz <christopher.hinz@hm.edu>
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 #
 # Open-source FPGA flow for the Phase-3 Arty-A7 bring-up:
 #   yosys (synthesis) -> nextpnr-xilinx (place & route, FASM) ->

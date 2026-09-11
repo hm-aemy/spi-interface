@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Minimal UART transmitter, 8N1, parameterised baud divider. Feeds the Arty
 // USB-UART (FT2232 channel B) so a host can verify the loopback test result

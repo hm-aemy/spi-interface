@@ -1,5 +1,6 @@
 // Copyright 2026 University of Applied Sciences Munich
 // Christopher Hinz <christopher.hinz@hm.edu>
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 //
 // Arty-A7 Board-A wrapper ("the memory") for the two-board bring-up: wires
 // the SRAM slave to Pmod header JA so a second Arty board (top_master.sv or
