@@ -71,5 +71,13 @@ docs/   Sphinx documentation (published as GitHub Pages)
 
 ## License
 
-© 2026 Hochschule München, Christopher Hinz. License not yet finalised —
-all rights reserved until then; free to use for teaching/research at HM.
+Copyright 2026 Hochschule München (University of Applied Sciences Munich),
+Christopher Hinz.
+
+Licensed under the Solderpad Hardware License v 2.1 (the "License"); you
+may not use this work except in compliance with the License, or, at your
+option, the Apache License version 2.0. You may obtain a copy of the
+License at <https://solderpad.org/licenses/SHL-2.1/>; the full text is in
+[`LICENSE`](LICENSE).
+
+`SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1`
