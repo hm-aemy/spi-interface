@@ -1,8 +1,10 @@
 # Documentation: strict Sphinx build (-W, warnings are errors) on every push,
 # published as GitHub Pages from the default branch:
 #   https://hm-aemy.github.io/spi-interface/
-# The Pages source must be set to "GitHub Actions" once in the repository
-# settings; configure-pages tries to do that on the first deployment.
+# One-time setup: the Pages source must be set to "GitHub Actions" in the
+# repository settings (Settings -> Pages -> Build and deployment), otherwise
+# the deploy job fails in configure-pages. The default GITHUB_TOKEN cannot
+# enable Pages itself.
 
 name: docs
 
@@ -53,8 +55,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - id: deployment
         uses: actions/deploy-pages@v4
