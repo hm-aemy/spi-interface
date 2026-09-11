@@ -1,6 +1,7 @@
 # Documentation: strict Sphinx build (-W, warnings are errors) on every push,
-# published as GitHub Pages from the default branch:
-#   https://hm-aemy.github.io/spi-interface/
+# published as GitHub Pages from the default branch (the hm-aemy organisation
+# serves its Pages under a custom domain):
+#   https://aemy.cs.hm.edu/spi-interface/
 # One-time setup: the Pages source must be set to "GitHub Actions" in the
 # repository settings (Settings -> Pages -> Build and deployment), otherwise
 # the deploy job fails in configure-pages. The default GITHUB_TOKEN cannot

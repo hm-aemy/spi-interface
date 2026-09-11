@@ -45,7 +45,7 @@ Full documentation (architecture, interface spec with timing diagrams,
 generated register map, programmer's guide, design rationale, verification
 plan, FPGA test setups, known issues): **`docs/`** (Sphinx/MyST), built by
 CI and published as GitHub Pages:
-<https://hm-aemy.github.io/spi-interface/> (on a GitLab hosting: as GitLab
+<https://aemy.cs.hm.edu/spi-interface/> (on a GitLab hosting: as GitLab
 Pages of the project).
 
 Build locally:
